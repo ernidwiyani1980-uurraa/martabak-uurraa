@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pesan Martabak Uurraa</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>Pesan Martabak Uurraa</h1>
+
+<nav>
+    <a href="index.html">Profil</a> |
+    <a href="katalog.html">Katalog</a> |
+    <a href="testimoni.html">Testimoni</a> |
+    <a href="pesan.html">Pesan</a> |
+    <a href="lokasi.html">Lokasi</a>
+</nav>
+
+<hr>
+
+<div class="container">
+    <h2>Form Pemesanan</h2>
+
+    <input type="text" id="nama" placeholder="Nama Anda"><br><br>
+
+    <select id="menu" onchange="hitungTotal()">
+        <option value="27000">Martabak Coklat - 27.000</option>
+        <option value="30000">Martabak Keju - 30.000</option>
+        <option value="35000">Martabak Mix - 35.000</option>
+    </select><br><br>
+
+    <input type="number" id="jumlah" placeholder="Jumlah" oninput="hitungTotal()"><br><br>
+
+    <p id="totalHarga">Total: Rp0</p>
+
+    <textarea id="catatan" placeholder="Catatan tambahan"></textarea><br><br>
+
+    <button class="btn" onclick="kirimPesanan()">Pesan Sekarang</button>
+</div>
+
+<br><br>
+
+<h2>Pilih Platform Pemesanan</h2>
+
+<div class="platform">
+
+    <a href="https://spf.shopee.co.id/7AZaRSZ3sP" target="_blank" class="card-platform shopee">
+        <h3>ShopeeFood</h3>
+        <p>Cabang 1</p>
+    </a>
+
+    <a href="https://spf.shopee.co.id/4VYpGbJFkg" target="_blank" class="card-platform shopee">
+        <h3>ShopeeFood</h3>
+        <p>Cabang 2</p>
+    </a>
+
+    <a href="https://gofood.link/u/pjbDgG" target="_blank" class="card-platform gojek">
+        <h3>GoFood</h3>
+        <p>Order via Gojek</p>
+    </a>
+
+</div>
+
+<br>
+
+<p>Jam Operasional: 08.00 - 03.30</p>
+
+<!-- FLOATING WA -->
+<a href="https://api.whatsapp.com/send?phone=6281291641437&text=Halo%20saya%20ingin%20pesan%20martabak"
+   target="_blank"
+   class="floating-wa">
+   💬 Chat
+</a>
+
+<script>
+function hitungTotal() {
+    var menu = document.getElementById("menu");
+    var harga = parseInt(menu.value);
+
+    var jumlah = parseInt(document.getElementById("jumlah").value);
+
+    if (!jumlah || jumlah < 1) {
+        document.getElementById("totalHarga").innerText = "Total: Rp0";
+        return;
+    }
+
+    var total = harga * jumlah;
+    var totalFormat = total.toLocaleString("id-ID");
+
+    document.getElementById("totalHarga").innerText = "Total: Rp" + totalFormat;
+}
+
+function kirimPesanan() {
+    var nama =
+     document.getElementById("nama").value.trim();
+    var menu = document.getElementById("menu");
+    var menuText =
+     menu.options[menu.selectedIndex].text;
+    var harga = parseInt(menu.value);
+    var jumlah =
+     parseInt(document.getElementById("jumlah").value);
+    var catatan =
+     document.getElementById("catatan").value.trim();
+
+    if (!nama || !jumlah || jumlah < 1) {
+        alert("Isi nama dan jumlah dengan benar ya!");
+        return;
+    }
+
+    var total = harga * jumlah;
+    var totalFormat = total.toLocaleString("id-ID");
+
+    var pesan = `Halo, saya ingin pesan:
+Nama: ${nama}
+Menu: ${menuText}
+Jumlah: ${jumlah}
+Total: Rp${totalFormat}
+Catatan: ${catatan}`;
+
+    var url = "https://api.whatsapp.com/send?phone=6281291641437&text=" + encodeURIComponent(pesan);
+
+    // 🔥 LOADING EFFECT
+    var btn = document.querySelector(".btn");
+    btn.innerText = "Memproses...";
+    btn.disabled = true;
+
+    setTimeout(function() {
+        window.open(url, "_blank");
+
+        btn.innerText = "Pesan Sekarang";
+        btn.disabled = false;
+
+        document.getElementById("nama").value = "";
+        document.getElementById("jumlah").value = "";
+        document.getElementById("catatan").value = "";
+        document.getElementById("totalHarga").innerText = "Total: Rp0";
+    }, 1500);
+}
+</script>
